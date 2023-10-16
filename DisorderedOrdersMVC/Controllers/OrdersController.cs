@@ -32,7 +32,7 @@ namespace DisorderedOrdersMVC.Controllers
 
             VerifyStock(order);
 
-            var total = CalculateTotal(order);
+            var total = order.CalculateTotal(order);
 
             IPaymentProcessor processor = SelectProcessor(paymentType);
 
@@ -82,9 +82,9 @@ namespace DisorderedOrdersMVC.Controllers
             }
             return order;
         }
-
-        // verify stock available
-        private void VerifyStock(Order order)
+        
+        //verify stock
+        public void VerifyStock(Order order)
         {
             foreach (var orderItem in order.Items)
             {
@@ -95,18 +95,6 @@ namespace DisorderedOrdersMVC.Controllers
 
                 orderItem.Item.DecreaseStock(orderItem.Quantity);
             }
-        }
-
-        // calculate total price
-        private int CalculateTotal(Order order)
-        {
-            var total = 0;
-            foreach (var orderItem in order.Items)
-            {
-                var itemPrice = orderItem.Item.Price * orderItem.Quantity;
-                total += itemPrice;
-            }
-            return total;
         }
 
         // process payment
